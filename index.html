@@ -1721,15 +1721,21 @@
                 });
             }
         });
-
-        function openMessage() {
+function openMessage() {
             const envelope = document.getElementById('message-envelope-container');
             const videoContainer = document.getElementById('message-video-container');
             const video = document.getElementById('video-1');
 
+            // ★クリックされた瞬間に再生を開始する
+            let playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("自動再生がブロックされました。", error);
+                });
+            }
+
             envelope.style.opacity = '0';
             envelope.style.transform = 'scale(0.8)';
-            video.load();
 
             setTimeout(() => {
                 envelope.style.display = 'none';
@@ -1737,12 +1743,6 @@
                 setTimeout(() => {
                     videoContainer.style.opacity = '1';
                     videoContainer.style.transform = 'translateY(0)';
-                    let playPromise = video.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.log("自動再生がブロックされました。");
-                        });
-                    }
                 }, 50);
             }, 500);
         }
